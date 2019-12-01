@@ -1,9 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField,SubmitField,PasswordField,IntegerField, TextAreaField
-from werkzeug.security import generate_password_hash,check_password_hash
-from wtforms.validators import Email,EqualTo,DataRequired
-from wtforms import ValidationError
-from flask_wtf.file import FileAllowed, FileField
+from wtforms import StringField, SubmitField, IntegerField, TextAreaField
 
 class QueryForm(FlaskForm):
     query = StringField('Query', render_kw={"placeholder":"Your Queries Here!"})

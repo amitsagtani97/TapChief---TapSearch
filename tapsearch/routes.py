@@ -1,15 +1,12 @@
 from io import StringIO
 
 from flask import *
-# from project import db, invertedIndex
 from tapsearch.forms import QueryForm, NewDocForm
 from tapsearch.indexer import InvertedIndex, Database
-
-# PDF Miner imports
-# from pdfminer.pdfinterp import PDFResourceManager, PDFPageInterpreter
-# from pdfminer.converter import TextConverter
-# from pdfminer.layout import LAParams
-# from pdfminer.pdfpage import PDFPage
+from pdfminer.pdfinterp import PDFResourceManager, PDFPageInterpreter
+from pdfminer.converter import TextConverter
+from pdfminer.layout import LAParams
+from pdfminer.pdfpage import PDFPage
 
 
 admin = Blueprint('admin',__name__)
@@ -48,35 +45,35 @@ def loadNewDocPage():
     return render_template('load-new-doc.html', form=newDocForm)
 
 
-# @admin.route('/load-new-pdf', methods=['POST', 'GET'])
-# def loadNewPdfPage():
-#     def convert_pdf_to_txt(path):
-#         rsrcmgr = PDFResourceManager()
-#         retstr = StringIO()
-#         codec = 'utf-8'
-#         laparams = LAParams()
-#         device = TextConverter(rsrcmgr, retstr, codec=codec, laparams=laparams)
-#         fp = open(path, 'rb')
-#         interpreter = PDFPageInterpreter(rsrcmgr, device)
-#         password = ""
-#         maxpages = 0
-#         caching = True
-#         pagenos=set()
-#         for page in PDFPage.get_pages(fp, pagenos, maxpages=maxpages, password=password,caching=caching, check_extractable=True):
-#             interpreter.process_page(page)
-#         text = retstr.getvalue()
-#         fp.close()
-#         device.close()
-#         retstr.close()
-#         return text
-#     text = ''
-#     if request.method == "POST":
-#         f = request.files['file']
-#         f.save(f.filename)
-#         text = convert_pdf_to_txt(f.filename)
-#     if text:
-#         invertedIndex.index_document(text, True)
-#     return redirect(url_for('admin.landingPage'))
+@admin.route('/load-new-pdf', methods=['POST', 'GET'])
+def loadNewPdfPage():
+    def convert_pdf_to_txt(path):
+        rsrcmgr = PDFResourceManager()
+        retstr = StringIO()
+        codec = 'utf-8'
+        laparams = LAParams()
+        device = TextConverter(rsrcmgr, retstr, codec=codec, laparams=laparams)
+        fp = open(path, 'rb')
+        interpreter = PDFPageInterpreter(rsrcmgr, device)
+        password = ""
+        maxpages = 0
+        caching = True
+        pagenos=set()
+        for page in PDFPage.get_pages(fp, pagenos, maxpages=maxpages, password=password,caching=caching, check_extractable=True):
+            interpreter.process_page(page)
+        text = retstr.getvalue()
+        fp.close()
+        device.close()
+        retstr.close()
+        return text
+    text = ''
+    if request.method == "POST":
+        f = request.files['file']
+        f.save(f.filename)
+        text = convert_pdf_to_txt(f.filename)
+    if text:
+        invertedIndex.index_document(text, True)
+    return redirect(url_for('admin.landingPage'))
 
 
 @admin.route('/<query>/search-results', methods=['POST', 'GET'])
