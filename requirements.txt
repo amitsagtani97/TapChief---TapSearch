@@ -37,7 +37,7 @@ numpy==1.16.4
 olefile==0.45.1
 PAM==0.4.2
 pandas==0.24.1
-paramiko==2.0.0
+paramiko==2.0.9
 pexpect==4.2.1
 Pillow==5.1.0
 pyasn1==0.4.2
