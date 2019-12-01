@@ -1,8 +1,4 @@
-from project import app
-
-@app.route('/')
-def hello():
-    return "Hello World!"
+from tapsearch import app
 
 if __name__ == '__main__':
     app.run(debug=True)
